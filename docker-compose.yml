@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: goodbooks-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  api:
+    build: .
+    container_name: goodbooks-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/goodbooks
+      - DB_NAME=goodbooks
+      - API_KEY=dev-key
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
